@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sin Conexión - ticficha</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+            /* Fondo Gris Claro del logo */
+            background-color: #DDDEDD; 
+            /* Texto en el Azul Oscuro de la tipografía "cha" */
+            color: #122633; 
+            padding: 20px;
+            margin: 0;
+        }
+
+        .icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+            /* Verde Lima del punto de la 'i' y el check */
+            color: #9AC343; 
+        }
+
+        h1 {
+            font-size: 26px;
+            margin-bottom: 15px;
+            font-weight: 700;
+            color: #122633;
+        }
+
+        p {
+            color: #48914B; /* Verde intermedio para el texto secundario */
+            margin-bottom: 30px;
+            font-weight: 500;
+            max-width: 300px;
+        }
+
+        button {
+            /* Botón con el Azul Oscuro corporativo */
+            background-color: #122633; 
+            color: #FFFFFF;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px; /* Bordes redondeados como el estilo del logo */
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(18, 38, 51, 0.2);
+        }
+
+        button:hover {
+            /* Cambio al Verde Bosque al pasar el ratón */
+            background-color: #167E4C;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="icon">
+        <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+        </svg>
+    </div>
+    <h1>Sin Conexión</h1>
+    <p>Parece que no tienes acceso a internet ahora mismo.</p>
+    <button onclick="window.location.reload()">Reintentar conexión</button>
+</body>
+
+</html>

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Fichaje Comercial del Motor</title>
+
+    <meta name="theme-color" content="#122633">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="ticficha">
+
+    <link rel="manifest" href="manifest.json">
+
+    <link rel="apple-touch-icon" href="icons/icon-192x192.png">
+    <link rel="icon" type="image/png" href="icons/favicon.ico">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body,
+        html {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #DDDEDD;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        #app-frame {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+        }
+
+        #loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #ffffff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 0.5s ease;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #E2E8F0;
+            border-top: 5px solid #9AC343;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        .loading-text {
+            color: #122633;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @supports (padding-top: env(safe-area-inset-top)) {
+            body {
+                padding-top: env(safe-area-inset-top);
+                background-color: #122633;
+            }
+
+            #app-frame {
+                height: calc(100% - env(safe-area-inset-top));
+                background-color: #DDDEDD;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="loader">
+        <div class="spinner"></div>
+        <div class="loading-text">Cargando ticficha...</div>
+    </div>
+
+    <iframe id="app-frame" src="https://script.google.com/macros/s/AKfycbzoZ9ToW2ar7IdNC04BPBjTfC8fjhrrtXTCCF57VuOR1JoUbTinj9QYvIFQkne1pl7_/exec"
+        allow="geolocation; microphone; camera; fullscreen"
+        sandbox="allow-downloads allow-forms allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-top-navigation-by-user-activation">
+    </iframe>
+
+    <script>
+        // 1. Registro del Service Worker mejorado
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                // Quitamos la barra inicial '/' para usar ruta relativa al dominio actual
+                navigator.serviceWorker.register('sw.js')
+                    .then(registration => {
+                        console.log('SW Registered correctamente');
+                        
+                        // Opcional: Forzar actualización si hay cambios
+                        registration.onupdatefound = () => {
+                            const installingWorker = registration.installing;
+                            installingWorker.onstatechange = () => {
+                                if (installingWorker.state === 'installed') {
+                                    if (navigator.serviceWorker.controller) {
+                                        console.log('Nueva versión disponible, por favor recarga.');
+                                    }
+                                }
+                            };
+                        };
+                    })
+                    .catch(error => {
+                        console.log('SW Registration Failed: ', error);
+                    });
+            });
+        }
+
+        // 2. Manejador del evento de instalación (A2HS)
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            // Evita que Chrome muestre el banner automático demasiado pronto
+            e.preventDefault();
+            deferredPrompt = e;
+            console.log('Evento beforeinstallprompt capturado. La app es instalable.');
+        });
+
+        // 3. Control del Loader
+        const iframe = document.getElementById('app-frame');
+        const loader = document.getElementById('loader');
+
+        iframe.onload = function () {
+            setTimeout(() => {
+                loader.style.opacity = '0';
+                setTimeout(() => {
+                    loader.style.display = 'none';
+                }, 500);
+            }, 1500);
+        };
+    </script>
+</body>
+
+</html>
